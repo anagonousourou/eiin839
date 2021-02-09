@@ -1,25 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\anago\\Documents\\si4\\soc-ws\\eiin839\\TP1\\Echo\\ChatServer\\EchoServer.csproj": {}
+    "C:\\Users\\anago\\Documents\\school-gits\\eiin839\\TP1\\Echo\\ChatServer\\EchoServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\anago\\Documents\\si4\\soc-ws\\eiin839\\TP1\\Echo\\ChatServer\\EchoServer.csproj": {
+    "C:\\Users\\anago\\Documents\\school-gits\\eiin839\\TP1\\Echo\\ChatServer\\EchoServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anago\\Documents\\si4\\soc-ws\\eiin839\\TP1\\Echo\\ChatServer\\EchoServer.csproj",
+        "projectUniqueName": "C:\\Users\\anago\\Documents\\school-gits\\eiin839\\TP1\\Echo\\ChatServer\\EchoServer.csproj",
         "projectName": "EchoServer",
-        "projectPath": "C:\\Users\\anago\\Documents\\si4\\soc-ws\\eiin839\\TP1\\Echo\\ChatServer\\EchoServer.csproj",
+        "projectPath": "C:\\Users\\anago\\Documents\\school-gits\\eiin839\\TP1\\Echo\\ChatServer\\EchoServer.csproj",
         "packagesPath": "C:\\Users\\anago\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\anago\\Documents\\si4\\soc-ws\\eiin839\\TP1\\Echo\\ChatServer\\obj\\",
+        "outputPath": "C:\\Users\\anago\\Documents\\school-gits\\eiin839\\TP1\\Echo\\ChatServer\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
-        ],
         "configFilePaths": [
           "C:\\Users\\anago\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"

@@ -15,79 +15,67 @@ namespace Echo
         static void Main(string[] args)
         {
 
+            int counter = 0;
+            var routes = new Dictionary<string, string>();
+
+            routes["/"] = "../../../www/pub/index.html";
+            routes["/about"] = "../../../www/pub/about.html";
+
             Console.CancelKeyPress += delegate
             {
-                System.Environment.Exit(0);
+                System.Environment.Exit(0); 
             };
 
-            TcpListener ServerSocket = new TcpListener(IPAddress.Any,5000);
-            
+            TcpListener ServerSocket = new TcpListener(IPAddress.Any, 5000);
+
             ServerSocket.Start();
 
             Console.WriteLine("Server started..");
             while (true)
             {
                 TcpClient clientSocket = ServerSocket.AcceptTcpClient();
-                
-                
-                NetworkStream ns= clientSocket.GetStream();
-                BinaryWriter writer = new BinaryWriter(ns);
-                
-                byte[] data=new byte[4500];
-                ns.Read(data);
-                Console.WriteLine(Encoding.Default.GetString(data));
-                StringBuilder header = new StringBuilder();
-                string body = "Salut tout le monde";
-                header.Append($"HTTP/1.1 200 OK\r\nContent-Length: {body.Length}\r\nContent-Type: text/html\r\nLast - Modified: Wed, 12 Aug 1998 15:03:50 GMT\r\nAccept - Ranges: bytes\r\nETag: “04f97692cbd1: 377”\r\nDate: Thu, 19 Jun 2008 19:29:07 GMT\r\n\r\n{body}"
-                    );
+                counter++;
+                Console.WriteLine($"Accepting client {counter}");
+                new Thread(() =>
+                {
+                    int number = counter;
+                    NetworkStream ns = clientSocket.GetStream();
+                    BinaryWriter writer = new BinaryWriter(ns);
+
+                    byte[] data = new byte[4500];
+                    ns.Read(data);
+                    string requestHeader = Encoding.Default.GetString(data);
+                    string body = "Not Found";
+                    string urlpath = requestHeader.Split(' ')[1];
+
+                    if (routes.ContainsKey(urlpath))
+                    {
+                        body = System.IO.File.ReadAllText(routes[urlpath]);
+                    }
+                    else
+                    {
+
+                    }
 
 
-                   
+                    StringBuilder template = new StringBuilder();
 
-                byte[] hello = Encoding.Default.GetBytes(
-                    header.ToString());
-                writer.Write(hello);
-                //clientSocket.Close();
-                
-            }
+                    template.Append(
+                        $"HTTP/1.1 200 OK\r\nContent-Length: {body.Length}\r\nContent-Type: text/html\r\nLast-Modified: {DateTime.Now.ToString("F")}\r\nAccept-Ranges: bytes\r\nETag: “04f97692cbd1: 377”\r\nDate: {DateTime.Now.ToString("F")}\r\n\r\n{body}"
+                        );
 
 
-        }
-    }
+                    byte[] hello = Encoding.Default.GetBytes(
+                        template.ToString());
+                    writer.Write(hello);
+                    Console.WriteLine($"Finish with client {number}");
 
-    public class HandleClient
-    {
-        TcpClient clientSocket;
-        public void startClient(TcpClient inClientSocket)
-        {
-            this.clientSocket = inClientSocket;
-            Thread ctThread = new Thread(Echo);
-            ctThread.Start();
-        }
+                    //clientSocket.Close();
 
-
-
-        private void Echo()
-        {
-            NetworkStream stream = clientSocket.GetStream();
-            BinaryReader reader = new BinaryReader(stream);
-            BinaryWriter writer = new BinaryWriter(stream);
-
-            while (true)
-            {
-
-                string str = @"<TITLE> L'exemple HTML le plus simple</TITLE> 
-<H1> Ceci est un sous-titre de niveau 1</H1>
-Bienvenue dans le monde HTML. Ceci est un paragraphe.
-<P> Et ceci en est un second. </P>
-<A HREF=index.html>cliquez ici</A> pour réafficher";
-                Console.WriteLine(str);
-                writer.Write(str);
+                }).Start();
             }
         }
 
 
-
     }
-
 }
