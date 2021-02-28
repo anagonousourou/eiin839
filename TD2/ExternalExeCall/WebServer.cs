@@ -1,22 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
+using System.Linq;
 using System.Text;
+using System.Net;
+using System.IO;
+using System.Web;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
-namespace BasicServerHTTPlistener
+namespace Webserver.Generic  
 {
-    internal class Program
+
+    /**
+        Interface pour factoriser la création d'une réponse en fonction de l'url
+        pour la réutiliser dans ReflectionSample
+    */
+    public interface IAnswerMaker
     {
-        private static void Main(string[] args)
+        string Make(Uri url);
+    }  
+
+    //Une classe WebServer qui gère la lancement du serveur;
+    class WebServer
+    {
+        private IAnswerMaker maker;
+        public WebServer(IAnswerMaker maker)
+        {
+            this.maker = maker;
+        }
+
+        public void Launch(string[] args)
         {
             if (!HttpListener.IsSupported)
             {
                 Console.WriteLine("A more recent Windows version is required to use the HttpListener class.");
                 return;
             }
- 
- 
+
+
             // Create a listener.
             HttpListener listener = new HttpListener();
 
@@ -48,20 +69,12 @@ namespace BasicServerHTTPlistener
                 // Note: The GetContext method blocks while waiting for a request.
                 HttpListenerContext context = listener.GetContext();
                 HttpListenerRequest request = context.Request;
-                IDictionary<string, string> collection = new Dictionary<string,string>();
+                
 
                 string documentContents;
-                Console.WriteLine(request.Headers.Keys.Count);
-                foreach(var k in request.Headers.Keys)
-                {
-                    collection.Add((string)k, request.Headers.Get((string)k));
-                    
-
-                }
-
-                Header h = new Header(collection);
-
                 
+                
+
 
                 using (Stream receiveStream = request.InputStream)
                 {
@@ -70,14 +83,24 @@ namespace BasicServerHTTPlistener
                         documentContents = readStream.ReadToEnd();
                     }
                 }
+
                 Console.WriteLine($"Received request for {request.Url}");
+
+                string responseString = this.maker.Make(request.Url);
+                
                 Console.WriteLine(documentContents);
+
+                
+
+                //launch the executable
+
+                
 
                 // Obtain a response object.
                 HttpListenerResponse response = context.Response;
 
                 // Construct a response.
-                string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+                
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                 // Get a response stream and write the response to it.
                 response.ContentLength64 = buffer.Length;
