@@ -22,7 +22,7 @@ namespace ExternalExeCall
                 var args = new string[] { aug1, aug2 };
                 ProcessStartInfo start = new ProcessStartInfo
                 {
-                    FileName = @"C:\Users\anago\Documents\school-gits\eiin839\TD2\ExecTest\bin\Debug\ExecTest.exe", // Specify exe name.
+                    FileName = @"../../../ExecTest/bin/Debug/ExecTest.exe", // Specify exe name.
                     Arguments = args.Aggregate<string>((a, b) => a + " " + b), // Specify arguments.
 
                     UseShellExecute = false,
